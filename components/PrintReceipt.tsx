@@ -25,7 +25,7 @@ const PrintReceipt: React.FC<PrintReceiptProps> = ({ record, onDone }) => {
         printWindow.document.write('<html><head><title>Print Receipt</title>');
         printWindow.document.write(`
           <style>
-            body { font-family: 'Courier New', monospace; margin: 0; padding: 10px; color: #000; background-color:#fff; }
+            body { font-family: 'Cairo', 'Courier New', monospace; direction: rtl; margin: 0; padding: 10px; color: #000; background-color:#fff; }
             .receipt { width: 80mm; padding: 5mm; box-sizing: border-box; }
             h1 { font-size: 1.2em; text-align: center; margin: 0 0 10px 0; }
             p { margin: 2px 0; font-size: 0.9em; }
@@ -54,25 +54,25 @@ const PrintReceipt: React.FC<PrintReceiptProps> = ({ record, onDone }) => {
   return (
     <div ref={printContentRef} style={{ display: 'none' }}>
       <div className="receipt">
-        <h1>Service Desk Pro</h1>
-        <p>Repair Receipt</p>
+        <h1>إدارة خدمات الصيانة</h1>
+        <p>إيصال صيانة</p>
         <hr />
-        <p><span className="bold">Job ID:</span> {record.id}</p>
-        <p><span className="bold">Date:</span> {new Date(record.dateTime).toLocaleString()}</p>
-        <p><span className="bold">Employee:</span> {record.employee}</p>
+        <p><span className="bold">معرف المهمة:</span> {record.id}</p>
+        <p><span className="bold">التاريخ:</span> {new Date(record.dateTime).toLocaleString('ar-EG')}</p>
+        <p><span className="bold">الموظف:</span> {record.employee}</p>
         <hr />
-        <p><span className="bold">Customer:</span> {record.customerName}</p>
-        <p><span className="bold">Phone:</span> {record.phone}</p>
+        <p><span className="bold">العميل:</span> {record.customerName}</p>
+        <p><span className="bold">الهاتف:</span> {record.phone}</p>
         <hr />
-        <p className="bold">Fault Description:</p>
+        <p className="bold">وصف العطل:</p>
         <p>{record.faultDescription}</p>
         <hr />
         <div className="item">
-          <p className="bold">Estimated Cost:</p>
+          <p className="bold">التكلفة التقديرية:</p>
           <p className="bold">${record.estimatedCost.toFixed(2)}</p>
         </div>
         <hr />
-        <p style={{ textAlign: 'center', marginTop: '10px' }}>Thank you for your business!</p>
+        <p style={{ textAlign: 'center', marginTop: '10px' }}>شكراً لتعاملكم معنا!</p>
       </div>
     </div>
   );

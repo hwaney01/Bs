@@ -15,27 +15,27 @@ const initialRecords: ServiceRecord[] = [
     id: 'JOB-2024-0001',
     dateTime: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), 
     employee: 'employee1', 
-    customerName: 'John Doe', 
+    customerName: 'أحمد علي', 
     phone: '555-1234', 
-    faultDescription: 'Cracked screen on iPhone 13', 
+    faultDescription: 'شاشة مكسورة لجهاز آيفون 13', 
     estimatedCost: 150 
   },
   { 
     id: 'JOB-2024-0002', 
     dateTime: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
     employee: 'admin', 
-    customerName: 'Jane Smith', 
+    customerName: 'فاطمة محمد', 
     phone: '555-5678', 
-    faultDescription: 'Laptop won\'t turn on. Suspected motherboard failure.', 
+    faultDescription: 'اللابتوب لا يعمل. يشتبه في عطل باللوحة الأم.', 
     estimatedCost: 400 
   },
   { 
     id: 'JOB-2024-0003', 
     dateTime: new Date().toISOString(),
     employee: 'employee1', 
-    customerName: 'Peter Jones', 
+    customerName: 'خالد محمود', 
     phone: '555-8765', 
-    faultDescription: 'Water damage on Samsung S22', 
+    faultDescription: 'تلف بسبب الماء في جهاز سامسونج S22', 
     estimatedCost: 250 
   },
 ];

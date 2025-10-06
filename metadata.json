@@ -1,5 +1,5 @@
 {
-  "name": "repair bs",
-  "description": "A comprehensive application for managing customer service and repair records, including user management, data entry, receipt printing, and a real-time dashboard. All data is stored locally in the browser.",
+  "name": "نظام إدارة خدمات الصيانة",
+  "description": "تطبيق شامل لإدارة سجلات خدمة العملاء والإصلاحات، يتضمن إدارة المستخدمين، إدخال البيانات، طباعة الإيصالات، ولوحة تحكم تفاعلية. يتم تخزين جميع البيانات محليًا في المتصفح.",
   "requestFramePermissions": []
 }

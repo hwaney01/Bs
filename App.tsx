@@ -37,12 +37,11 @@ const Main: React.FC = () => {
     return <LoginForm />;
   }
   
-  // FIX: Explicitly type navItems to prevent TypeScript from inferring 'view' as a generic string instead of the 'View' type.
   const navItems: NavItem[] = [
-    { name: 'Dashboard', view: 'DASHBOARD', icon: <HomeIcon /> },
-    { name: 'Add Record', view: 'ADD_RECORD', icon: <PlusCircleIcon />, roles: ['Admin', 'Employee'] },
-    { name: 'View All Records', view: 'VIEW_RECORDS', icon: <TableCellsIcon /> },
-    { name: 'Users', view: 'USERS', icon: <UsersIcon />, roles: ['Admin'] },
+    { name: 'لوحة التحكم', view: 'DASHBOARD', icon: <HomeIcon /> },
+    { name: 'إضافة سجل', view: 'ADD_RECORD', icon: <PlusCircleIcon />, roles: ['Admin', 'Employee'] },
+    { name: 'عرض السجلات', view: 'VIEW_RECORDS', icon: <TableCellsIcon /> },
+    { name: 'المستخدمون', view: 'USERS', icon: <UsersIcon />, roles: ['Admin'] },
   ];
 
   const renderView = () => {
@@ -61,7 +60,7 @@ const Main: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-slate-900 font-sans">
+    <div className="flex h-screen bg-slate-900">
       <Sidebar
         navItems={navItems}
         currentView={currentView}

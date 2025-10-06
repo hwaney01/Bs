@@ -29,7 +29,7 @@ export const addRecord = async (newRecordData: Omit<ServiceRecord, 'id' | 'dateT
   // This hook can only be called in a component, so we will get the user from session storage
   const currentUser = JSON.parse(sessionStorage.getItem('currentUser') || '{}');
   if (!currentUser.username) {
-      throw new Error("No authenticated user found to create a record.");
+      throw new Error("لم يتم العثور على مستخدم مسجل لإنشاء سجل.");
   }
 
   const records = getRecordsFromStorage();
@@ -47,7 +47,7 @@ export const addRecord = async (newRecordData: Omit<ServiceRecord, 'id' | 'dateT
 export const updateRecord = async (id: string, updatedData: Partial<ServiceRecord>): Promise<ServiceRecord> => {
   const records = getRecordsFromStorage();
   const recordIndex = records.findIndex(r => r.id === id);
-  if (recordIndex === -1) throw new Error('Record not found');
+  if (recordIndex === -1) throw new Error('السجل غير موجود');
   
   records[recordIndex] = { ...records[recordIndex], ...updatedData };
   saveRecordsToStorage(records);

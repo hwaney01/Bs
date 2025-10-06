@@ -5,9 +5,9 @@ import { useData } from '../context/DataContext';
 import { ServiceRecord } from '../types';
 
 const StatCard: React.FC<{ title: string; value: string | number; color: string }> = ({ title, value, color }) => (
-  <div className={`bg-slate-800 p-6 rounded-lg shadow-lg border-l-4 ${color}`}>
+  <div className={`bg-slate-800 p-6 rounded-lg shadow-lg border-r-4 ${color}`}>
     <h3 className="text-sm font-medium text-slate-400">{title}</h3>
-    <p className="text-3xl font-bold text-white mt-1">{value}</p>
+    <p className="text-3xl font-bold text-white mt-1 text-right">{value}</p>
   </div>
 );
 
@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
     return {
       today: todayRecords.length,
       week: weekRecords.length,
-      totalCost: totalCost.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
+      totalCost: totalCost.toLocaleString('ar-EG', { style: 'currency', currency: 'USD' }),
       byEmployee,
     };
   }, [records, loading]);
@@ -47,23 +47,23 @@ const Dashboard: React.FC = () => {
     return records.slice(0, 5);
   }, [records]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>جاري التحميل...</div>;
   
   const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#0088FE', '#00C49F'];
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8 text-white">Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-8 text-white">لوحة التحكم</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <StatCard title="Records Today" value={stats.today} color="border-cyan-500" />
-        <StatCard title="Records This Week" value={stats.week} color="border-purple-500" />
-        <StatCard title="Total Estimated Cost" value={stats.totalCost} color="border-green-500" />
+        <StatCard title="سجلات اليوم" value={stats.today} color="border-cyan-500" />
+        <StatCard title="سجلات هذا الأسبوع" value={stats.week} color="border-purple-500" />
+        <StatCard title="إجمالي التكلفة التقديرية" value={stats.totalCost} color="border-green-500" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-slate-800 p-6 rounded-lg shadow-lg">
-          <h2 className="text-xl font-semibold mb-4 text-white">Records by Employee</h2>
+          <h2 className="text-xl font-semibold mb-4 text-white">السجلات حسب الموظف</h2>
            <ResponsiveContainer width="100%" height={300}>
             <BarChart data={stats.byEmployee} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
                 cursor={{ fill: 'rgba(100, 116, 139, 0.1)' }}
               />
               <Legend />
-              <Bar dataKey="records" name="Records Handled" fill="#8884d8">
+              <Bar dataKey="records" name="السجلات المعالجة" fill="#8884d8">
                 {stats.byEmployee.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
@@ -84,7 +84,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="bg-slate-800 p-6 rounded-lg shadow-lg">
-          <h2 className="text-xl font-semibold mb-4 text-white">Recent Activity</h2>
+          <h2 className="text-xl font-semibold mb-4 text-white">النشاط الأخير</h2>
           <ul className="space-y-4">
             {recentActivity.map((record: ServiceRecord) => (
               <li key={record.id} className="flex justify-between items-center p-3 bg-slate-700/50 rounded-md">
@@ -92,9 +92,9 @@ const Dashboard: React.FC = () => {
                   <p className="font-semibold text-white">{record.customerName} - <span className="text-slate-300">{record.id}</span></p>
                   <p className="text-sm text-slate-400">{record.faultDescription.substring(0, 40)}...</p>
                 </div>
-                <div className="text-right">
+                <div className="text-left">
                     <p className="font-bold text-green-400">${record.estimatedCost.toFixed(2)}</p>
-                    <p className="text-xs text-slate-500">{new Date(record.dateTime).toLocaleDateString()}</p>
+                    <p className="text-xs text-slate-500">{new Date(record.dateTime).toLocaleDateString('ar-EG')}</p>
                 </div>
               </li>
             ))}

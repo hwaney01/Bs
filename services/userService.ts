@@ -26,7 +26,7 @@ export const getUsers = async (): Promise<User[]> => {
 export const addUser = async (newUser: Omit<User, 'id'>): Promise<User> => {
   const users = getUsersFromStorage();
   if (users.some(u => u.username === newUser.username)) {
-    throw new Error('Username already exists');
+    throw new Error('اسم المستخدم موجود بالفعل');
   }
   const userWithId: User = { ...newUser, id: `u${Date.now()}` };
   users.push(userWithId);
@@ -38,7 +38,7 @@ export const addUser = async (newUser: Omit<User, 'id'>): Promise<User> => {
 export const updateUser = async (id: string, updatedUser: Partial<Omit<User, 'id'>>): Promise<User> => {
   let users = getUsersFromStorage();
   const userIndex = users.findIndex(u => u.id === id);
-  if (userIndex === -1) throw new Error('User not found');
+  if (userIndex === -1) throw new Error('المستخدم غير موجود');
   
   users[userIndex] = { ...users[userIndex], ...updatedUser };
   saveUsersToStorage(users);
