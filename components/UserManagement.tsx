@@ -17,6 +17,7 @@ const translateRole = (role: Role): string => {
 const UserFormModal: React.FC<{ user?: User, onClose: () => void, onSave: (data: Partial<User>) => void }> = ({ user, onClose, onSave }) => {
     const [formData, setFormData] = useState({
         username: user?.username || '',
+        phone: user?.phone || '',
         password: '',
         role: user?.role || Role.EMPLOYEE,
     });
@@ -54,6 +55,10 @@ const UserFormModal: React.FC<{ user?: User, onClose: () => void, onSave: (data:
                     <div>
                         <label htmlFor="username" className="block text-sm font-medium text-slate-300 mb-1">اسم المستخدم</label>
                         <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} required className="w-full bg-slate-900 border border-slate-700 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+                    </div>
+                    <div>
+                        <label htmlFor="phone" className="block text-sm font-medium text-slate-300 mb-1">رقم الهاتف</label>
+                        <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} required className="w-full bg-slate-900 border border-slate-700 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
                     </div>
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-1">كلمة المرور {user ? '(اتركه فارغاً للإبقاء على كلمة المرور الحالية)' : ''}</label>
@@ -126,6 +131,7 @@ const UserManagement: React.FC = () => {
                         <thead className="bg-slate-700/50">
                             <tr>
                                 <th className="p-4 font-semibold">اسم المستخدم</th>
+                                <th className="p-4 font-semibold">رقم الهاتف</th>
                                 <th className="p-4 font-semibold">الدور</th>
                                 <th className="p-4 font-semibold text-center">إجراءات</th>
                             </tr>
@@ -134,6 +140,7 @@ const UserManagement: React.FC = () => {
                             {users.map(user => (
                                 <tr key={user.id} className="hover:bg-slate-700/30">
                                     <td className="p-4 font-medium text-white">{user.username}</td>
+                                    <td className="p-4 font-mono text-slate-300">{user.phone}</td>
                                     <td className="p-4 text-slate-300">{translateRole(user.role)}</td>
                                     <td className="p-4">
                                         <div className="flex justify-center items-center space-x-2">

@@ -1,7 +1,6 @@
-
-import { ServiceRecord } from '../types';
+import { ServiceRecord, UsedProduct } from '../types';
 import { RECORDS_KEY } from './mockDb';
-import { useAuth } from '../context/AuthContext';
+import { updateStock } from './productService';
 
 const getRecordsFromStorage = (): ServiceRecord[] => {
   const recordsJson = localStorage.getItem(RECORDS_KEY);
@@ -25,19 +24,13 @@ export const getRecords = async (): Promise<ServiceRecord[]> => {
   return getRecordsFromStorage();
 };
 
-export const addRecord = async (newRecordData: Omit<ServiceRecord, 'id' | 'dateTime' | 'employee'>): Promise<ServiceRecord> => {
-  // This hook can only be called in a component, so we will get the user from session storage
-  const currentUser = JSON.parse(sessionStorage.getItem('currentUser') || '{}');
-  if (!currentUser.username) {
-      throw new Error("لم يتم العثور على مستخدم مسجل لإنشاء سجل.");
-  }
-
+export const addRecord = async (newRecordData: Omit<ServiceRecord, 'id' | 'dateTime' | 'usedProducts'>): Promise<ServiceRecord> => {
   const records = getRecordsFromStorage();
   const newRecord: ServiceRecord = {
     ...newRecordData,
     id: generateUniqueCode(records),
     dateTime: new Date().toISOString(),
-    employee: currentUser.username,
+    usedProducts: [], // Initialize with empty products
   };
   records.push(newRecord);
   saveRecordsToStorage(records);
@@ -48,14 +41,59 @@ export const updateRecord = async (id: string, updatedData: Partial<ServiceRecor
   const records = getRecordsFromStorage();
   const recordIndex = records.findIndex(r => r.id === id);
   if (recordIndex === -1) throw new Error('السجل غير موجود');
+
+  const originalRecord = records[recordIndex];
+
+  // If usedProducts have changed, update stock
+  if (updatedData.usedProducts) {
+    const originalProducts = originalRecord.usedProducts || [];
+    const updatedProducts = updatedData.usedProducts;
+
+    const stockChanges = new Map<string, number>();
+
+    // Decrease stock for new/increased items of type 'Product'
+    updatedProducts.forEach(p => {
+        if (p.type === 'Product') {
+            const originalQty = originalProducts.find(op => op.productId === p.productId)?.quantity || 0;
+            const diff = p.quantity - originalQty;
+            if (diff !== 0) {
+                stockChanges.set(p.productId, (stockChanges.get(p.productId) || 0) - diff);
+            }
+        }
+    });
+
+    // Increase stock for removed items of type 'Product'
+    originalProducts.forEach(op => {
+        if (op.type === 'Product' && !updatedProducts.some(p => p.productId === op.productId)) {
+            stockChanges.set(op.productId, (stockChanges.get(op.productId) || 0) + op.quantity);
+        }
+    });
+
+    // Apply stock changes
+    for (const [productId, change] of stockChanges.entries()) {
+        await updateStock(productId, change);
+    }
+  }
   
-  records[recordIndex] = { ...records[recordIndex], ...updatedData };
+  records[recordIndex] = { ...originalRecord, ...updatedData };
   saveRecordsToStorage(records);
   return records[recordIndex];
 };
 
 export const deleteRecord = async (id: string): Promise<void> => {
-  let records = getRecordsFromStorage();
-  records = records.filter(r => r.id !== id);
-  saveRecordsToStorage(records);
+    let records = getRecordsFromStorage();
+    const recordToDelete = records.find(r => r.id === id);
+
+    // If the record being deleted had products, return them to stock
+    if (recordToDelete && recordToDelete.usedProducts) {
+        for (const product of recordToDelete.usedProducts) {
+            // Only return items of type 'Product' to stock
+            if (product.type === 'Product') {
+                await updateStock(product.productId, product.quantity);
+            }
+        }
+    }
+
+    records = records.filter(r => r.id !== id);
+    saveRecordsToStorage(records);
 };

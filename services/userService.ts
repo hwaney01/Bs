@@ -11,10 +11,10 @@ const saveUsersToStorage = (users: User[]) => {
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
 };
 
-export const login = async (username: string, password: string): Promise<User | null> => {
+export const login = async (phone: string, password: string): Promise<User | null> => {
   const users = getUsersFromStorage();
-  const user = users.find(u => u.username === username && u.password === password);
-  return user ? { id: user.id, username: user.username, role: user.role } : null;
+  const user = users.find(u => u.phone === phone && u.password === password);
+  return user ? { id: user.id, username: user.username, role: user.role, phone: user.phone } : null;
 };
 
 export const getUsers = async (): Promise<User[]> => {
@@ -28,6 +28,9 @@ export const addUser = async (newUser: Omit<User, 'id'>): Promise<User> => {
   if (users.some(u => u.username === newUser.username)) {
     throw new Error('اسم المستخدم موجود بالفعل');
   }
+  if (users.some(u => u.phone === newUser.phone)) {
+    throw new Error('رقم الهاتف موجود بالفعل');
+  }
   const userWithId: User = { ...newUser, id: `u${Date.now()}` };
   users.push(userWithId);
   saveUsersToStorage(users);
@@ -40,6 +43,13 @@ export const updateUser = async (id: string, updatedUser: Partial<Omit<User, 'id
   const userIndex = users.findIndex(u => u.id === id);
   if (userIndex === -1) throw new Error('المستخدم غير موجود');
   
+  if (updatedUser.username && users.some(u => u.id !== id && u.username === updatedUser.username)) {
+    throw new Error('اسم المستخدم موجود بالفعل');
+  }
+  if (updatedUser.phone && users.some(u => u.id !== id && u.phone === updatedUser.phone)) {
+      throw new Error('رقم الهاتف موجود بالفعل');
+  }
+
   users[userIndex] = { ...users[userIndex], ...updatedUser };
   saveUsersToStorage(users);
   const { password, ...userToReturn } = users[userIndex];

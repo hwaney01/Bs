@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
+import { usePermissions } from '../context/PermissionContext';
 import { View, NavItem } from '../App';
 import { LogoutIcon } from './Icons';
 import { Role } from '../types';
@@ -22,10 +22,11 @@ const translateRole = (role: Role): string => {
 
 const Sidebar: React.FC<SidebarProps> = ({ navItems, currentView, setCurrentView }) => {
   const { user, logout } = useAuth();
-  
+  const { canAccess } = usePermissions();
+
   const userHasAccess = (item: NavItem) => {
-    if (!item.roles) return true;
-    return user && item.roles.includes(user.role);
+    if (!user) return false;
+    return canAccess(user.role, item.view);
   };
   
   return (

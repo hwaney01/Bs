@@ -6,7 +6,7 @@ import { initializeDb } from '../services/mockDb';
 
 interface AuthContextType {
   user: User | null;
-  login: (username: string, password: string) => Promise<User | null>;
+  login: (phone: string, password: string) => Promise<User | null>;
   logout: () => void;
   isAdmin: boolean;
   isEmployee: boolean;
@@ -25,8 +25,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
 
-  const login = async (username: string, password: string): Promise<User | null> => {
-    const loggedInUser = await apiLogin(username, password);
+  const login = async (phone: string, password: string): Promise<User | null> => {
+    const loggedInUser = await apiLogin(phone, password);
     if (loggedInUser) {
       setUser(loggedInUser);
       sessionStorage.setItem('currentUser', JSON.stringify(loggedInUser));

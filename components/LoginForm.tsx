@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 const LoginForm: React.FC = () => {
-  const [username, setUsername] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login } = useAuth();
@@ -12,9 +12,9 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     setError('');
     try {
-      const user = await login(username, password);
+      const user = await login(phone, password);
       if (!user) {
-        setError('اسم المستخدم أو كلمة المرور غير صحيحة.');
+        setError('رقم الهاتف أو كلمة المرور غير صحيحة.');
       }
     } catch (err) {
       setError('حدث خطأ أثناء تسجيل الدخول.');
@@ -32,15 +32,15 @@ const LoginForm: React.FC = () => {
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <input
-                id="username"
-                name="username"
-                type="text"
-                autoComplete="username"
+                id="phone"
+                name="phone"
+                type="tel"
+                autoComplete="tel"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-3 border border-slate-700 bg-slate-900 placeholder-slate-500 text-white rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="اسم المستخدم"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="رقم الهاتف"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </div>
             <div>
@@ -69,11 +69,6 @@ const LoginForm: React.FC = () => {
             </button>
           </div>
         </form>
-         <div className="text-center text-xs text-slate-500">
-            <p>مدير: admin / password</p>
-            <p>موظف: employee1 / password</p>
-            <p>مشاهد: viewer / password</p>
-        </div>
       </div>
     </div>
   );
